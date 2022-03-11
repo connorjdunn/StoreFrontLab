@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace StoreFrontLab.UI.MVC.Models
+namespace StoreFrontLabIU.MVC.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
