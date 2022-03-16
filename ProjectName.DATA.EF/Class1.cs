@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectName.DATA.EF
+namespace ClimbersClub.DATA.EF
 {
     public class Class1
     {
