@@ -26,5 +26,11 @@ namespace StoreFrontLabIU.MVC.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Products()
+        {
+            return View();
+        }
     }
 }
