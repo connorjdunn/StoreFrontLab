@@ -51,68 +51,66 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs">
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
-    <Compile Include="ClimbersClub.Context.cs">
+    <Compile Include="ClimberClubMetadata\ClimberClubMetadata.cs" />
+    <Compile Include="ClimbersClubDataEF.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClimbersClub.Context.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClimbersClub.cs">
+    <Compile Include="ClimbersClubDataEF.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClimbersClub.Designer.cs">
+    <Compile Include="ClimbersClubDataEF.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClimbersClub.edmx</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
     </Compile>
     <Compile Include="Department.cs">
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee.cs">
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
     <Compile Include="Product.cs">
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockStatu.cs">
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagram.cs">
-      <DependentUpon>ClimbersClub.tt</DependentUpon>
+      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="ClimbersClub.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ClimbersClub.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="ClimbersClub.edmx.diagram">
-      <DependentUpon>ClimbersClub.edmx</DependentUpon>
+    <EntityDeploy Include="ClimbersClubDataEF.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ClimbersClubDataEF.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ClimbersClubDataEF.edmx.diagram">
+      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClimbersClub.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ClimbersClub.Context.cs</LastGenOutput>
-      <DependentUpon>ClimbersClub.edmx</DependentUpon>
-    </Content>
-    <Content Include="ClimbersClub.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ClimbersClub.edmx</DependentUpon>
-      <LastGenOutput>ClimbersClub.cs</LastGenOutput>
-    </Content>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Content Include="ClimbersClubDataEF.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
+      <LastGenOutput>ClimbersClubDataEF.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ClimbersClubDataEF.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
+      <LastGenOutput>ClimbersClubDataEF.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

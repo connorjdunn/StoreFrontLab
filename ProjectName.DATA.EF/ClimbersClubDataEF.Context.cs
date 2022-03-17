@@ -13,10 +13,10 @@ namespace ProjectName.DATA.EF
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Climber_ClubEntities : DbContext
+    public partial class Climber_ClubEntities1 : DbContext
     {
-        public Climber_ClubEntities()
-            : base("name=Climber_ClubEntities")
+        public Climber_ClubEntities1()
+            : base("name=Climber_ClubEntities1")
         {
         }
     

@@ -43,6 +43,7 @@
           <Property Name="IsFemaleApperal" Type="bit" Nullable="false" />
           <Property Name="OtherApperal" Type="bit" Nullable="false" />
           <Property Name="ProductImage" Type="varchar" MaxLength="100" />
+          <Property Name="BrandName" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="StockStatus">
           <Key>
@@ -181,6 +182,7 @@
           <Property Name="IsFemaleApperal" Type="Boolean" Nullable="false" />
           <Property Name="OtherApperal" Type="Boolean" Nullable="false" />
           <Property Name="ProductImage" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Products" ToRole="Categories" />
           <NavigationProperty Name="StockStatu" Relationship="Self.FK_Product_Stock_Status" FromRole="Products" ToRole="StockStatus" />
         </EntityType>
@@ -250,7 +252,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Climber_ClubEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Climber_ClubEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
@@ -279,7 +281,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Climber_ClubEntities">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Climber_ClubEntities1">
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="Model.Category">
               <MappingFragment StoreEntitySet="Categories">
@@ -320,6 +322,7 @@
                 <ScalarProperty Name="IsFemaleApperal" ColumnName="IsFemaleApperal" />
                 <ScalarProperty Name="OtherApperal" ColumnName="OtherApperal" />
                 <ScalarProperty Name="ProductImage" ColumnName="ProductImage" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

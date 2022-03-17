@@ -25,6 +25,7 @@ namespace ProjectName.DATA.EF
         public bool IsFemaleApperal { get; set; }
         public bool OtherApperal { get; set; }
         public string ProductImage { get; set; }
+        public string BrandName { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual StockStatu StockStatu { get; set; }
