@@ -51,49 +51,49 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs">
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClimberClubMetadata\ClimberClubMetadata.cs" />
-    <Compile Include="ClimbersClubDataEF.Context.cs">
+    <Compile Include="ClimberClubMetadata\ClimbersClubMetadata.cs" />
+    <Compile Include="ClimbersClub.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClimbersClubDataEF.Context.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClimbersClubDataEF.cs">
+    <Compile Include="ClimbersClub.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClimbersClubDataEF.Designer.cs">
+    <Compile Include="ClimbersClub.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
+      <DependentUpon>ClimbersClub.edmx</DependentUpon>
     </Compile>
     <Compile Include="Department.cs">
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee.cs">
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
     <Compile Include="Product.cs">
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockStatu.cs">
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagram.cs">
-      <DependentUpon>ClimbersClubDataEF.tt</DependentUpon>
+      <DependentUpon>ClimbersClub.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
-    <EntityDeploy Include="ClimbersClubDataEF.edmx">
+    <EntityDeploy Include="ClimbersClub.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ClimbersClubDataEF.Designer.cs</LastGenOutput>
+      <LastGenOutput>ClimbersClub.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="ClimbersClubDataEF.edmx.diagram">
-      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
+    <None Include="App.Config" />
+    <None Include="ClimbersClub.edmx.diagram">
+      <DependentUpon>ClimbersClub.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -101,15 +101,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClimbersClubDataEF.Context.tt">
+    <Content Include="ClimbersClub.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
-      <LastGenOutput>ClimbersClubDataEF.Context.cs</LastGenOutput>
+      <DependentUpon>ClimbersClub.edmx</DependentUpon>
+      <LastGenOutput>ClimbersClub.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="ClimbersClubDataEF.tt">
+    <Content Include="ClimbersClub.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ClimbersClubDataEF.edmx</DependentUpon>
-      <LastGenOutput>ClimbersClubDataEF.cs</LastGenOutput>
+      <DependentUpon>ClimbersClub.edmx</DependentUpon>
+      <LastGenOutput>ClimbersClub.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
