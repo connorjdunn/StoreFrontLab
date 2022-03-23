@@ -13,6 +13,9 @@
 
 
     <!-- Additional CSS Files -->
+
+
+
     <link rel="stylesheet" type="text/css" href="~/Content/assets/css/bootstrap.min.css">
 
     <link rel="stylesheet" type="text/css" href="~/Content/assets/css/font-awesome.css">
@@ -22,6 +25,9 @@
     <link rel="stylesheet" href="~/Content/assets/css/owl-carousel.css">
 
     <link rel="stylesheet" href="~/Content/assets/css/lightbox.css">
+
+    <link rel="stylesheet" href="~/Content/PagedList.css" />
+
     <!--
 
     TemplateMo 571 Hexashop
@@ -29,6 +35,9 @@
     https://templatemo.com/tm-571-hexashop
 
     -->
+
+    @*@Styles.Render("~/Content/assets/css")*@
+
 </head>
 
 <body>
@@ -291,6 +300,8 @@
     </footer>
 
 
+
+
     <!-- jQuery -->
     <script src="~/Content/assets/js/jquery-2.1.0.min.js"></script>
 
@@ -313,6 +324,8 @@
     <!-- Global Init -->
     <script src="~/Content/assets/js/custom.js"></script>
 
+    @*@Scripts.Render("~/Content/assets/js")*@
+    @*@Scripts.Render("~/bundles/template")*@
     <script>
 
         $(function () {
@@ -330,6 +343,8 @@
         });
 
     </script>
+
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>
