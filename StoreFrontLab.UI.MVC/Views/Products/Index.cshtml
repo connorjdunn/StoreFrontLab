@@ -4,11 +4,20 @@
     ViewBag.Title = "Index";
 }
 
+<br />
+<br />
+<br />
+<br />
+
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
+<p class="row">
+    <button id="toggleProductCreate" class="btn btn-primary text-right pull-left">Add New</button>
 </p>
+
+<div id="ProductCreate">
+    @Html.Partial("ProductCreate", new ProjectName.DATA.EF.Product())
+</div>
 <table class="table">
     <tr>
         <th>
@@ -49,7 +58,7 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        <tr id="Product-@item.ProductID">
             <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
@@ -84,14 +93,284 @@
                 @Html.DisplayFor(modelItem => item.StockStatu.StockStatus)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ProductID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ProductID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.ProductID }) |*@
+                <a href="" class="EditLink" id="@item.ProductID">Edit</a> |
+
+
+                @*@Html.ActionLink("Details", "Details", new { id=item.ProductID }) |*@
+                <a href="" class="DetailsLink" id="@item.ProductID">Details</a> |
+
+
+                @* Replaced the standard delete link/button with an AJAX delete version *@
+                @*@Html.ActionLink("Delete", "Delete", new { id=item.ProductID })*@
+
+                @* Ajax.ActionLink signature for the link below:
+                    Ajax.ActionLink(string linkText, string action, string controller, object routeValue, object ajaxOptions)*@
+
+                @* ajaxOptions includes which Method to submit the request with (post), and confirm
+                    is set to show a string with an "are you sure?" confirmation box. If succesful,
+                    then we'll run some functionality (here, deleteConfirmed function)*@
+
+                @Ajax.ActionLink("Delete", "AjaxDelete", "Products", new { id = item.ProductID},
+                new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    Confirm = $"Are you sure you want to delete {item.ProductName} from Products?",
+                    OnSuccess = "deleteConfirmed",
+                    OnFailure = "deleteFailed"
+                }
+                )
+
             </td>
         </tr>
     }
 
 </table>
+
+@* This is a placeholder for eventual details content to be loaded into a pop up *@
+<div id="ProductDetails"></div>
+
+@section scripts {
+
+    <script>
+
+        //********************* AJAX DELETE *********************
+
+        function deleteConfirmed(responce, status, data) {
+
+            //Remove the row for the desired Product from the table on screen
+            var rowId = "#Product-" + responce.id;
+            $("#ProductsTable").find(rowId).remove();
+
+            //Display a status message (use AJAX response's message property)
+            $("#MessageContent").html("<div class='alert alert-success'>" + responce.message + "</div>");
+
+        }
+
+        function deleteFailed(responce, status, data) {
+
+            //Display a status message (use AJAX response's message property)
+            $("#MessageContent").html("<div class='alert alert-danger'>Delete unsuccessful. Is this product referenced by a book? If so please change the books product or delete the book.</div>");
+
+        }
+
+
+        //********************* SHOW DETAILS DIALOG BOX *********************
+        $('a.DetailsLink').click(function (e) {
+            e.preventDefault(); //This prevents the default behavior - here, that would be reloading the page
+
+            //Target the dialog/pop-up placeholder <div>, pass it data (the clicked link's ID),
+            //then apply jQeuryUI dialog plugin to make it a pop-up with various settings.
+            //Open the ProductDetails partial view in popup for the correct product
+            $("#ProductDetails").data('pId', $(this).attr("id"))
+                .dialog({
+                    width: 400,
+                    height: 200,
+                    open: function () {
+                        var pubID = $(this).data('pId');
+                        $(this).load("/Products/ProductDetails/" + pubID);
+                    },
+                    title: "Product Details",
+                    modal: true,
+                    resizable: false
+                }); //End of the conversion to dialog box
+
+        }); //End details button click event handler
+
+
+
+        //********************* SHOW CREATE FORM *********************
+        $("#ProductCreate").hide(); //Start with Create form hidden
+        $("#toggleProductCreate").click(function () {
+            $("#ProductCreate").toggle(); //Flip between show/hide onclick
+        });//End create button click event handler
+
+
+
+        //********************* AJAX CREATE *********************
+        /*
+         * Summary: When the form is submitted, we need to format
+         * the data (serialization). The notification (MessageContent)
+         * will show status updates.
+         *
+         * jQuery Ajax will do the following:
+         * - Call the POST AjaxCreate action in the Products controller
+         * - Pass in the JSON data from the form
+         * - On failure, it will:
+         *      - Notify the user of the error
+         * - On sucess, it will:
+         *      - Notify the user of success
+         *      - Reset the form
+         *      - "Add" the new row to the Products table on this page
+         */
+
+        $("#ProductCreateForm").submit(function (e) {
+            var formData = $(this).serializeArray();
+            console.log(formData);
+            e.preventDefault();
+
+            $.ajax({
+                url: "/Products/ProductCreate",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                error: function (e) {
+                    $("#MessageContent").html("<div class='alert alert-danger'>There was a problem!</div>");
+                },
+                success: function (foo) {
+                    $("#MessageContent").html("<div class='alert alert-success'>Record succesfully added!</div>");
+                    $("#ProductCreateForm")[0].reset();
+                    $(function () {
+                        var row = '<tr><td>' + foo.ProductName
+                            + '</td><td>' + foo.GenderID
+                            //+ '</td><td>' + (foo.IsActive
+                            //    ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            //    : '<input type="checkbox" disabled="disabled" />'
+                            //) //End ternary operator to assign the form's boolean value as a checkbox (checked or unchecked)
+                            + '</td><td>' + foo.UnitsInStock
+                            + '</td><td>' + foo.Price
+                            + '</td><td>' + (foo.IsMensApperal
+                                ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                                : '<input type="checkbox" disabled="disabled" />'
+                            );
+                        + '</rd><td>' + (foo.IsFemalApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        );
+                        + '</td><td>' + (foo.OtherApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        );
+                        + '</td><td>' + foo.ProductImage
+                            + '</td><td>' + foo.CategoryID
+                            + '</td><td>' + foo.BrandName
+                            + '</td><td>' + foo.StockStatusID
+                            + '</td><td>Refresh to view options</td></tr>';
+                        $("#ProductsTable").append(row);
+                    }); //End of build & append row functionality
+                } //End of the success property
+            }); //End Ajax form submission properties
+
+        }); //End form submit handler
+
+
+        //********************* AJAX UPDATE *********************
+        //Holding variable for original pub info
+        var originalContent = null;
+
+        //Wait for an <a> with the EditLink class to be clicked
+        $("a.EditLink").click(function (e) {
+            e.preventDefault();
+            var productID = $(this).attr("id");
+
+            //Get the <td> elements in that products's row
+            var row = $("#Product-" + productID).children();
+
+            //Assign the holding variable the values within those <td>s
+            originalContent = {
+                ProId: productID,
+                ProName: row[0].innerText,
+                GenID: row[1].innerText,
+                UniInStock: row[2].innerText,
+                Price: row[3].innerText,
+                MensAppar: row[4].firstElementChild.checked,
+                WomensAppar: row[5].firstElementChild.checked,
+                OtherAppar: row[6].firstElementChild.checked,
+                ProImage: row[7].innerText,
+                BranName: row[8].innerText,
+                CatID: row[9].innerText,
+                StockStatID: row[10].innerText
+            };
+
+            console.log(originalContent);
+
+            //Make a GET request for the product edit form/info
+            $.get("/Products/ProductEdit/" + productID, function (data) {
+                $("#Product-" + productID).replaceWith(
+                    '<tr id="Product-' + productID + '"><td colspan="5">' + data + '</td></tr>');
+            });
+
+        });
+
+        //When the user wants to save an updated product...
+        $(document).on("click", "#saveUpdate", function () {
+            var formData = $("#ProductEditForm").serializeArray();
+
+            $("#MessageContent").html("<div class='alert alert-info'>Please wait...</div>");
+
+            $.ajax({
+                url: "/Products/ProductEdit",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                success: function (data) {
+                    $("#MessageContent").html("<div class='alert alert-success'>Your record was successfully updated</div>");
+                    $("#ProductEditForm")[0].reset();
+
+                    $(function () {
+                        var row = '<tr><td>' + data.ProductName
+                            + '</td><td>' + data.GenderID
+                            + '</td><td>' + data.UnitsInStock
+                            + '</td><td>' + data.Price
+                            + '</td><td>' + (data.IsMensApperal
+                                ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                                : '<input type="checkbox" disabled="disabled" />'
+                            );
+                        + '</td><td>' + (data.IsFemalApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        );
+                        + '</td><td>' + (data.OtherApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        );
+                        + '</td><td>' + data.ProductImage
+                            + '</td><td>' + data.BrandName
+                            + '</td><td>' + data.CategoryId
+                            + '</td><td>' + data.StockStatusID
+                            + '</td><td>Refresh to view options</td></tr>';
+
+                        $('#Product-' + data.ProductID).replaceWith(row); //Replacing the row instead of appending (adding) it
+                    });
+
+                },
+                error: function (e) {
+                    $("#MessageContent").html("<div class='alert alert-warning'>There was an error. Please try again or contact the site administrator.</div>");
+
+                    $(function () {
+                        var row = '<tr id="Product-' + originalContent.ProID + '"><td>' + originalContent.ProName
+                            + '</td><td>' + originalContent.GenderID
+                            + '</td><td>' + originalContent.UnitsInStock
+                            + '</td><td>' + originalContent.Price
+                            + '</td><td>' + (originalContent.IsMensApperal
+                                ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                                : '<input type="checkbox" disabled="disabled" />'
+                            );
+                        + '</td><td>' + (originalContent.IsFemalApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        );
+                        + '</td><td>' + (originalContent.OtherApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        );
+                        + '</td><td>' + originalContent.ProductImage
+                            + '</td><td>' + originalContent.BrandName
+                            + '</td><td>' + originalContent.CategoryID
+                            + '</td><td>' + originalContent.StockStatusID
+                            + '</td><td>Refresh to view options</td></tr>';
+
+                        $('#Product-' + data.ProductID).replaceWith(row); //Replacing the row instead of appending (adding) it
+                    });
+                }
+
+            });
+        });
+
+
+    </script>
+
+}
 
 
 

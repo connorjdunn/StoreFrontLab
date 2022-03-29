@@ -33,7 +33,7 @@ namespace StoreFrontLabIU.MVC
             //          "~/Content/bootstrap.css",
             //          "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/assets/css").Include(
+            bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/css/bootstrap.min.css",
                 "~/Content/css/font-awesome.min.css",
                 //"~/Content/css/jquery.dataTables.min.css",
@@ -46,8 +46,8 @@ namespace StoreFrontLabIU.MVC
                 "~/Content/assets/css/lightbox.css" 
                 ));
 
-            bundles.Add(new ScriptBundle("~/Content/assets/js").Include(
-                "~/Content/assets/js/jquery-2.1.0.min.js" ,
+            bundles.Add(new ScriptBundle("~/Bundles/js").Include(
+                "~/Content/assets/js/jquery-2.1.0.min.js",
                 "~/Content/assets/js/popper.js",
                 "~/Content/assets/js/bootstrap.min.js",
                 "~/Content/assets/js/owl-carousel.js",
@@ -59,7 +59,9 @@ namespace StoreFrontLabIU.MVC
                 "~/Content/assets/js/imgfix.min.js",
                 "~/Content/assets/js/slick.js",
                 "~/Content/assets/js/lightbox.js",
-                "~/Content/assets/js/isotope.js"
+                "~/Content/assets/js/isotope.js",
+                "~/Content/assets/js/custom.js"
+
 
                 ));
         }

@@ -193,6 +193,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\ImageUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="configs\AppSecretKeys.xml" />
@@ -688,6 +689,9 @@
     <Content Include="Views\Categories\Edit.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\Products\ProductDetails.cshtml" />
+    <Content Include="Views\Products\ProductCreate.cshtml" />
+    <Content Include="Views\Products\ProductEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
