@@ -175,6 +175,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CustomErrorsController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -207,6 +208,7 @@
     <Content Include="Content\assets\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\assets\fonts\slick.svg" />
     <Content Include="Content\assets\images\alex-kramarevsky-ETQY2RmIdDg-unsplash.jpg" />
+    <Content Include="Content\assets\images\daniel-leone-g30P1zcOzXo-unsplash.jpg" />
     <Content Include="Content\assets\images\index\wei-zeng-gDIBiwiSSgc-unsplash.jpg" />
     <Content Include="Content\assets\images\Original_Images\about-left-image.jpg" />
     <Content Include="Content\assets\images\Original_Images\about-us-page-heading.jpg" />
@@ -692,9 +694,11 @@
     <Content Include="Views\Products\ProductDetails.cshtml" />
     <Content Include="Views\Products\ProductCreate.cshtml" />
     <Content Include="Views\Products\ProductEdit.cshtml" />
+    <Content Include="Views\CustomErrors\Unresolved.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\assets\images\Products\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

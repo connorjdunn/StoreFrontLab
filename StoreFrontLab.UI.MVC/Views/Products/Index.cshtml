@@ -1,7 +1,8 @@
-﻿@model IEnumerable<ProjectName.DATA.EF.Product>
+﻿@model PagedList.IPagedList<ProjectName.DATA.EF.Product>
+@using PagedList.Mvc
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Shop Products";
 }
 
 <br />
@@ -9,11 +10,20 @@
 <br />
 <br />
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p class="row">
-    <button id="toggleProductCreate" class="btn btn-primary text-right pull-left">Add New</button>
+    <button id="toggleProductCreate" class="btn btn-primary text-right pull-left">Add New Product</button>
 </p>
+
+<div id="MessageContent">
+
+</div>
+
+@* ADDED: Pager Code (Can be placed wherever we want on the page) *@
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 
 <div id="ProductCreate">
     @Html.Partial("ProductCreate", new ProjectName.DATA.EF.Product())
@@ -21,37 +31,37 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ProductName)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ProductName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.GenderID)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().GenderID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UnitsInStock)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().UnitsInStock)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsMensApperal)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IsMensApperal)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsFemaleApperal)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IsFemaleApperal)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OtherApperal)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().OtherApperal)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductImage)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ProductImage)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BrandName)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().BrandName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Category.CategoryName)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Category.CategoryName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StockStatu.StockStatus)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().StockStatu.StockStatus)
         </th>
         <th></th>
     </tr>
@@ -220,34 +230,34 @@
                 success: function (foo) {
                     $("#MessageContent").html("<div class='alert alert-success'>Record succesfully added!</div>");
                     $("#ProductCreateForm")[0].reset();
-                    $(function () {
-                        var row = '<tr><td>' + foo.ProductName
-                            + '</td><td>' + foo.GenderID
-                            //+ '</td><td>' + (foo.IsActive
-                            //    ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
-                            //    : '<input type="checkbox" disabled="disabled" />'
-                            //) //End ternary operator to assign the form's boolean value as a checkbox (checked or unchecked)
-                            + '</td><td>' + foo.UnitsInStock
-                            + '</td><td>' + foo.Price
-                            + '</td><td>' + (foo.IsMensApperal
-                                ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
-                                : '<input type="checkbox" disabled="disabled" />'
-                            );
+                    //$(function () {
+                    var row = '<tr><td>' + foo.ProductName
+                        + '</td><td>' + foo.GenderID
+                        //+ '</td><td>' + (foo.IsActive
+                        //    ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                        //    : '<input type="checkbox" disabled="disabled" />'
+                        //) //End ternary operator to assign the form's boolean value as a checkbox (checked or unchecked)
+                        + '</td><td>' + foo.UnitsInStock
+                        + '</td><td>' + foo.Price
+                        + '</td><td>' + (foo.IsMensApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        )
                         + '</rd><td>' + (foo.IsFemalApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
-                        );
+                        )
                         + '</td><td>' + (foo.OtherApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
-                        );
+                        )
                         + '</td><td>' + foo.ProductImage
-                            + '</td><td>' + foo.CategoryID
-                            + '</td><td>' + foo.BrandName
-                            + '</td><td>' + foo.StockStatusID
-                            + '</td><td>Refresh to view options</td></tr>';
-                        $("#ProductsTable").append(row);
-                    }); //End of build & append row functionality
+                        + '</td><td>' + foo.CategoryID
+                        + '</td><td>' + foo.BrandName
+                        + '</td><td>' + foo.StockStatusID
+                        + '</td><td>Refresh to view options</td></tr>';
+                    $("#ProductsTable").append(row);
+                    /*});*/ //End of build & append row functionality
                 } //End of the success property
             }); //End Ajax form submission properties
 
@@ -298,47 +308,49 @@
 
             $("#MessageContent").html("<div class='alert alert-info'>Please wait...</div>");
 
+
             $.ajax({
-                url: "/Products/ProductEdit",
+                url: "/Products/AjaxEdit",
                 type: "POST",
                 data: formData,
                 dataType: "json",
                 success: function (data) {
                     $("#MessageContent").html("<div class='alert alert-success'>Your record was successfully updated</div>");
-                    $("#ProductEditForm")[0].reset();
+                    $("#ProductEditForm").hide();
 
-                    $(function () {
-                        var row = '<tr><td>' + data.ProductName
-                            + '</td><td>' + data.GenderID
-                            + '</td><td>' + data.UnitsInStock
-                            + '</td><td>' + data.Price
-                            + '</td><td>' + (data.IsMensApperal
-                                ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
-                                : '<input type="checkbox" disabled="disabled" />'
-                            );
+
+                    var row = '<tr><td>' + data.ProductName
+                        + '</td><td>' + data.GenderID
+                        + '</td><td>' + data.UnitsInStock
+                        + '</td><td>' + data.Price
+                        + '</td><td>' + (data.IsMensApperal
+                            ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
+                            : '<input type="checkbox" disabled="disabled" />'
+                        )
                         + '</td><td>' + (data.IsFemalApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
-                        );
+                        )
                         + '</td><td>' + (data.OtherApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
-                        );
-                        + '</td><td>' + data.ProductImage
-                            + '</td><td>' + data.BrandName
-                            + '</td><td>' + data.CategoryId
-                            + '</td><td>' + data.StockStatusID
-                            + '</td><td>Refresh to view options</td></tr>';
+                        )
 
-                        $('#Product-' + data.ProductID).replaceWith(row); //Replacing the row instead of appending (adding) it
-                    });
+                        + '</td><td>' + data.ProductImage
+                        + '</td><td>' + data.BrandName
+                        + '</td><td>' + data.CategoryId
+                        + '</td><td>' + data.StockStatusID
+                        + '</td><td>Refresh to view options</td></tr>';
+
+                    $('#Product-' + data.ProductID).replaceWith(row); //Replacing the row instead of appending (adding) it
+
 
                 },
                 error: function (e) {
                     $("#MessageContent").html("<div class='alert alert-warning'>There was an error. Please try again or contact the site administrator.</div>");
 
                     $(function () {
-                        var row = '<tr id="Product-' + originalContent.ProID + '"><td>' + originalContent.ProName
+                        var row = '<tr id="Product-' + originalContent.ProductID + '"><td>' + originalContent.ProductName
                             + '</td><td>' + originalContent.GenderID
                             + '</td><td>' + originalContent.UnitsInStock
                             + '</td><td>' + originalContent.Price

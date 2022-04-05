@@ -37,6 +37,7 @@
     -->
 
     @Styles.Render("~/Content/css")
+    @RenderSection("htmlHead", false)
 
 </head>
 
@@ -64,11 +65,13 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+                            @*<li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
                             <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="#women">Women's</a></li>
+                            <li class="scroll-to-section"><a href="#women">Women's</a></li>*@
                             @*<li class="scroll-to-section"><a href="#kids">Kid's</a></li>*@
+                            <li>@Html.ActionLink("Products", "Index", "Products")</li>
                             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                            <li>@Html.ActionLink("Cart", "Index", "ShoppingCart")</li>
                             @*<li> Add shopping cart link here </li>*@
                         </ul>
                         @*<li class="submenu">
@@ -191,6 +194,8 @@
     @*<script src="~/Content/assets/js/custom.js"></script>*@
 
     @Scripts.Render("~/Bundles/js")
+    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js">
+    </script>
     @*@Scripts.Render("~/bundles/template")*@
     <script>
 

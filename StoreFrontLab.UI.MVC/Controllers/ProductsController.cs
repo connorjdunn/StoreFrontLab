@@ -10,6 +10,8 @@ using ProjectName.DATA.EF;
 using StoreFrontLab.UI.MVC.Models;
 using PagedList; //Added for access to PagedList
 using PagedList.Mvc; //Added for access to PagedList.MVC
+using System.Drawing;
+using StoreFrontLab.UI.MVC.Utilities;
 
 namespace StoreFrontLab.UI.MVC.Controllers
 {
@@ -17,7 +19,7 @@ namespace StoreFrontLab.UI.MVC.Controllers
     {
         private ClimbersClubEntities db = new ClimbersClubEntities();
 
-        #region Non Crud Functionality
+        #region Non AJAX Crud Functionality
 
         //// GET: Products
         //public ActionResult Index(int page = 1)
@@ -200,12 +202,82 @@ namespace StoreFrontLab.UI.MVC.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult Index()
+
+        //// GET: Products
+        //public ActionResult Index(int page = 1)
+        //{
+        //   int pageSize = 5;
+        //   var products = db.Products.Include(p => p.Category).Include(p => p.StockStatu).ToList();
+        //   return View(products.ToPagedList(page, pageSize));
+        //
+
+        #region Custom Add-To-Cart Functionality (Called from Details View)
+
+        public ActionResult AddToCart(int qty, int productID)
         {
-            var products = db.Products.Include(p => p.Category).Include(p => p.StockStatu);
+            //Create an empty shell for the LOCAL shopping cart variable
+            Dictionary<int, CartItemViewModel> shoppingCart = null;
+
+            //Check if the Session shopping cart exists. If so, we can use it to populate the local version
+            if (Session["cart"] != null)
+            {
+                //Session shopping car exists. Put it's items in the local version, which is easier to work with
+                shoppingCart = (Dictionary<int, CartItemViewModel>)Session["cart"];
+                //We need to UNBOX the Session object to its smaller, more specific type -- Explicit Casting
+            }
+
+            else
+            {
+                //If the Session cart doesn't exist yet, we need to instantiate it to get started
+                shoppingCart = new Dictionary<int, CartItemViewModel>();
+            }//After this if/else, we now have a local cart thats ready to add things to it
+
+            //Find the product they referenced by its ID
+            Product product = db.Products.Where(b => b.ProductID == productID).FirstOrDefault();
+
+            if (product == null)
+            {
+                //If given a bad ID, return the user to some other page to try again.
+                //Alternatively, we could throw some kind of error, which we will
+                //discuss further in Module 6.
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                //If the book is valid, add the line-item to the cart
+                CartItemViewModel item = new CartItemViewModel(qty, product);
+
+                //Put the item in the local cart. If they already have that product as a 
+                //cart item, instead we will update the quantity. This is a big part
+                //of why we have the dictionary.
+                if (shoppingCart.ContainsKey(product.ProductID))
+                {
+                    shoppingCart[product.ProductID].Qty += qty;
+                }
+                else
+                {
+                    shoppingCart.Add(product.ProductID, item);
+                }
+
+                //Now update the SESSION version of the cart so we can maintain that info between requests
+                Session["cart"] = shoppingCart; //No explicit casting needed here
+            }
+
+            //Send them to View their Cart Items
+            return RedirectToAction("Index", "ShoppingCart");
+
+        }
+
+        #endregion
+
+
+        public ActionResult Index(int page = 1)
+        {
+            int pageSize = 5;
+            var products = db.Products.Include(p => p.Category).Include(p => p.StockStatu).ToList();
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName");
             ViewBag.StockStatusID = new SelectList(db.StockStatus, "StockStatusID", "StockStatus");
-            return View(products.ToList());
+            return View(products.ToPagedList(page, pageSize));
         }
 
         #region AJAX CRUD Functionality
@@ -258,10 +330,76 @@ namespace StoreFrontLab.UI.MVC.Controllers
              */
         }
 
+        // POST: Products/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "ProductId, ProductName, CategoryID, GenderID, StockStatusID, UnitsInStock, Price, IsMensApperal, IsFemalApperal, OtherApperal, ProductImage, BrandName")] Product product, HttpPostedFileBase productImage)
+        {
+            if (ModelState.IsValid)
+            {
+
+                #region File Upload
+
+                string file = "NoImage.png";
+
+                if (productImage != null)
+                {
+                    file = productImage.FileName;
+
+                    string ext = file.Substring(file.LastIndexOf('.'));
+
+                    string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
+
+                    //Check that the uploaded file ext is in our list of acceptable extensions
+                    //and check that the file size is <= 4MB, which is the default maximum for ASP.NET
+
+                    if (goodExts.Contains(ext.ToLower()) && productImage.ContentLength <= 4194304)
+                    {
+                        //Create a new file name (using a GUID)
+                        file = Guid.NewGuid() + ext;
+
+                        #region Resize Image
+
+                        string savePath = Server.MapPath("~/Content/images/Products/");
+
+                        Image convertedImage = Image.FromStream(productImage.InputStream);
+
+                        int maxImageSize = 500;
+
+                        int maxThumbSize = 100;
+
+                        ImageUtility.ResizeImage(savePath, file, convertedImage, maxImageSize, maxThumbSize);
+
+                        #endregion
+                    }
+
+                    //No matter what we should update the PhotoUrl with the value of the file variable
+                    product.ProductImage = file;
+                }
+
+                #endregion
+
+                db.Products.Add(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            //ViewBag.ProductID = new SelectList(db.BookRoyalties, "BookID", "BookID", book.BookID);
+            //ViewBag.StockStatusID = new SelectList(db.BookStatuses, "BookStatusID", "BookStatusName", book.BookStatusID);
+            //ViewBag.GenreID = new SelectList(db.Genres, "GenreID", "GenreName", book.GenreID);
+            //ViewBag.PublisherID = new SelectList(db.Publishers, "PublisherID", "PublisherName", book.PublisherID);
+            return View(product);
+        }
+
         //Gets PartialView for a product edit form displayed with AJAX
         [HttpGet]
         public PartialViewResult ProductEdit(int id)
         {
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName");
+            ViewBag.StockStatusID = new SelectList(db.StockStatus, "StockStatusID", "StockStatus");
+
             Product product = db.Products.Find(id);
             return PartialView(product);
 

@@ -6,7 +6,7 @@
 
 <h2>ProductDetails</h2>
 
-<div>
+<div style="background-color: white;">
     <h4>Product</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -99,6 +99,18 @@
         </dd>
 
     </dl>
+
+@* ADDED THIS FOR "ADD TO CART" FUNCTIONALLITY *@
+<p>
+    @using (Html.BeginForm("AddToCart", "Products", new { @productID = Model.ProductID }, FormMethod.Post, new { @class = "text-center" }))
+    {
+        @Html.HiddenFor(x => x.ProductID)
+        <span class="label" style="color: #000;">Quantity: </span>
+        @Html.TextBox("Qty", 1, new { @class = "form-control", @style = "max-width: 50px; display: inline;" })
+        <input type="submit" value="Add to Cart" class="btn btn-primary" name="qty" />
+    }
+</p>
+
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProductID }) |

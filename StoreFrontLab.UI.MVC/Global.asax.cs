@@ -17,5 +17,12 @@ namespace StoreFrontLabIU.MVC
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_Error()
+        {
+            Response.Redirect("~/CustomError/Unresolved");
+
+            Response.Redirect("~/Error.html");
+        }
     }
 }
