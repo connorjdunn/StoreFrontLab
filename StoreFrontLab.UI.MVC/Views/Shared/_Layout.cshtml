@@ -13,20 +13,17 @@
 
 
     <!-- Additional CSS Files -->
-
-
-
     @*<link rel="stylesheet" type="text/css" href="~/Content/assets/css/bootstrap.min.css">
 
-    <link rel="stylesheet" type="text/css" href="~/Content/assets/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="~/Content/assets/css/font-awesome.css">
 
-    <link rel="stylesheet" href="~/Content/assets/css/templatemo-hexashop.css">
+        <link rel="stylesheet" href="~/Content/assets/css/templatemo-hexashop.css">
 
-    <link rel="stylesheet" href="~/Content/assets/css/owl-carousel.css">
+        <link rel="stylesheet" href="~/Content/assets/css/owl-carousel.css">
 
-    <link rel="stylesheet" href="~/Content/assets/css/lightbox.css">
+        <link rel="stylesheet" href="~/Content/assets/css/lightbox.css">
 
-    <link rel="stylesheet" href="~/Content/PagedList.css" />*@
+        <link rel="stylesheet" href="~/Content/PagedList.css" />*@
 
     <!--
 
@@ -66,12 +63,18 @@
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             @*<li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="#women">Women's</a></li>*@
+                                <li class="scroll-to-section"><a href="#men">Men's</a></li>
+                                <li class="scroll-to-section"><a href="#women">Women's</a></li>*@
                             @*<li class="scroll-to-section"><a href="#kids">Kid's</a></li>*@
                             <li>@Html.ActionLink("Products", "Index", "Products")</li>
                             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                             <li>@Html.ActionLink("Cart", "Index", "ShoppingCart")</li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Account</a>
+                                <div class="dropdown-menu account-dropdown" style="background-color: lightgray;">
+                                    @Html.Partial("_LoginPartial")
+                                </div>
+                            </li>
                             @*<li> Add shopping cart link here </li>*@
                         </ul>
                         @*<li class="submenu">
@@ -106,10 +109,11 @@
 
     @RenderBody()
 
-   
+
     <!-- ***** Footer Start ***** -->
     <footer>
         <div class="container">
+            @*
             <div class="row">
                 <div class="col-lg-3">
                     <div class="first-item">
@@ -148,7 +152,7 @@
                         <li><a href="#">Shipping</a></li>
                         <li><a href="#">Tracking ID</a></li>
                     </ul>
-                </div>
+                </div>*@
                 <div class="col-lg-12">
                     <div class="under-footer">
                         <p>
@@ -219,7 +223,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Added jQuery AJAX CDN -->
-    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>*@
 
     @RenderSection("scripts", required: false)
 

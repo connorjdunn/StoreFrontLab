@@ -25,9 +25,12 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 
-<div id="ProductCreate">
-    @Html.Partial("ProductCreate", new ProjectName.DATA.EF.Product())
-</div>
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div id="ProductCreate">
+        @Html.Partial("ProductCreate", new ProjectName.DATA.EF.Product())
+    </div>
+}
 <table class="table">
     <tr>
         <th>
@@ -91,7 +94,8 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 @Html.DisplayFor(modelItem => item.OtherApperal)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductImage)
+                @*@Html.DisplayFor(modelItem => item.ProductImage)*@
+                <img src="~/Content/assets/images/t_@item.ProductImage" alt="Product Image" title="@item.ProductName" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BrandName)
@@ -102,6 +106,8 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
             <td>
                 @Html.DisplayFor(modelItem => item.StockStatu.StockStatus)
             </td>
+            @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+            {
             <td>
                 @*@Html.ActionLink("Edit", "Edit", new { id = item.ProductID }) |*@
                 <a href="" class="EditLink" id="@item.ProductID">Edit</a> |
@@ -121,17 +127,18 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                     is set to show a string with an "are you sure?" confirmation box. If succesful,
                     then we'll run some functionality (here, deleteConfirmed function)*@
 
-                @Ajax.ActionLink("Delete", "AjaxDelete", "Products", new { id = item.ProductID},
-                new AjaxOptions
-                {
-                    HttpMethod = "POST",
-                    Confirm = $"Are you sure you want to delete {item.ProductName} from Products?",
-                    OnSuccess = "deleteConfirmed",
-                    OnFailure = "deleteFailed"
-                }
-                )
+                @Ajax.ActionLink("Delete", "AjaxDelete", "Products", new { id = item.ProductID },
+                     new AjaxOptions
+                     {
+                         HttpMethod = "POST",
+                         Confirm = $"Are you sure you want to delete {item.ProductName} from Products?",
+                         OnSuccess = "deleteConfirmed",
+                         OnFailure = "deleteFailed"
+                     }
+                     )
 
             </td>
+            }
         </tr>
     }
 
@@ -243,7 +250,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
                         )
-                        + '</rd><td>' + (foo.IsFemalApperal
+                        + '</td><td>' + (foo.IsFemaleApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
                         )
@@ -251,7 +258,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
                         )
-                        + '</td><td>' + foo.ProductImage
+                        + '</td><td>' + + foo.ProductImage
                         + '</td><td>' + foo.CategoryID
                         + '</td><td>' + foo.BrandName
                         + '</td><td>' + foo.StockStatusID
@@ -327,7 +334,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
                         )
-                        + '</td><td>' + (data.IsFemalApperal
+                        + '</td><td>' + (data.IsFemaleApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
                         )
@@ -358,7 +365,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                                 ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                                 : '<input type="checkbox" disabled="disabled" />'
                             );
-                        + '</td><td>' + (originalContent.IsFemalApperal
+                        + '</td><td>' + (originalContent.IsFemaleApperal
                             ? '<input type="checkbox" disabled="disabled" checked="checked"/>'
                             : '<input type="checkbox" disabled="disabled" />'
                         );

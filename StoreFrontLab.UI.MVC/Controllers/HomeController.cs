@@ -15,6 +15,11 @@ namespace StoreFrontLabIU.MVC.Controllers
             return View();
         }
 
+        public ActionResult Contact()
+        {
+            return View();
+        }
+
    //POST: Contact Form
         [HttpPost]
         [ValidateAntiForgeryToken]

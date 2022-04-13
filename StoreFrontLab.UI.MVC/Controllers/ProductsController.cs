@@ -193,14 +193,7 @@ namespace StoreFrontLab.UI.MVC.Controllers
         //}
         #endregion
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+
 
 
         //// GET: Products
@@ -362,7 +355,7 @@ namespace StoreFrontLab.UI.MVC.Controllers
 
                         #region Resize Image
 
-                        string savePath = Server.MapPath("~/Content/images/Products/");
+                        string savePath = Server.MapPath("~/Content/assets/images/");
 
                         Image convertedImage = Image.FromStream(productImage.InputStream);
 
@@ -424,8 +417,17 @@ namespace StoreFrontLab.UI.MVC.Controllers
             return Json(product);
         }
 
-        
+
 
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
